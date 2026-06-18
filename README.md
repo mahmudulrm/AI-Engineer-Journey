@@ -21,6 +21,7 @@ Topics covered include:
 * CI/CD for AI Systems
 * Monitoring and Observability
 * End-to-End AI Projects
+* AI Integrator
 
 The repository contains learning notes, code examples, experiments, architecture diagrams, deployment guides, and real-world projects designed to bridge the gap between AI development and production operations.
 
@@ -84,7 +85,7 @@ ai-engineer-journey/
 │
 └── README.md
 
-
+🔄 AI Integrator
 ✅ Python
 ✅ FastAPI
 🔄 RAG
