@@ -28,7 +28,6 @@ The repository contains learning notes, code examples, experiments, architecture
 Current Goal:
 Build production-ready AI applications and AI-powered automation systems while applying DevOps best practices for scalability, reliability, and security.
 
-
 ---
 ai-engineer-journey/
 │

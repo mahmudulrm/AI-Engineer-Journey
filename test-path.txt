@@ -1,0 +1,264 @@
+আপনার বর্তমান ব্যাকগ্রাউন্ড (Linux, DevOps, Kubernetes, PostgreSQL, CI/CD, Automation) থেকে এই **Agentic AI Engineer** রোলে যাওয়া বাস্তবসম্মত। তবে আপনাকে AI Application Engineering, LLMs এবং Agent Systems নিয়ে গভীরভাবে শিখতে হবে।
+
+নিচের রোডম্যাপ অনুসরণ করলে ৬-৯ মাসে ভালো অবস্থানে যেতে পারবেন।
+
+# Phase 1: Python Mastery (2-4 Weeks)
+
+আপনার যদি Python খুব শক্তিশালী না হয় তাহলে আগে এটি করুন।
+
+### শিখতে হবে
+
+* Advanced Python
+* OOP
+* Async Programming
+* FastAPI
+* Pydantic
+* Type Hints
+* REST API
+* Pytest
+
+### Project
+
+* FastAPI দিয়ে CRUD API
+* JWT Authentication
+* PostgreSQL Integration
+
+---
+
+# Phase 2: LLM Fundamentals (2-3 Weeks)
+
+### শিখতে হবে
+
+* Transformer
+* Attention Mechanism
+* Tokenization
+* Embeddings
+* Context Window
+* Temperature
+* Top-P
+* Hallucination
+* Prompt Engineering
+
+### Models
+
+* OpenAI GPT
+* Anthropic Claude
+* Google Gemini
+* Meta Llama
+
+### Project
+
+* ChatGPT Clone
+* PDF Q&A Bot
+
+---
+
+# Phase 3: LangChain & LangGraph (4-6 Weeks)
+
+এটি Job Description-এর সবচেয়ে গুরুত্বপূর্ণ অংশ।
+
+### শিখতে হবে
+
+* LangChain
+* LangGraph
+* Agents
+* Tools
+* Memory
+* Chains
+* Structured Output
+* Function Calling
+
+### Build
+
+1. Web Research Agent
+2. SQL Agent
+3. Email Agent
+4. Multi-step Planning Agent
+
+---
+
+# Phase 4: RAG Engineering (3-4 Weeks)
+
+### শিখতে হবে
+
+* RAG Architecture
+* Chunking
+* Embeddings
+* Hybrid Search
+* Reranking
+* Semantic Search
+
+### Vector Databases
+
+* Qdrant
+* Pinecone
+* Weaviate
+* Chroma
+
+### Project
+
+* Company Knowledge Assistant
+* Documentation Search Engine
+
+---
+
+# Phase 5: Agentic AI (Most Important) (6-8 Weeks)
+
+### Reasoning Patterns
+
+* ReAct
+* Chain of Thought
+* Tree of Thoughts
+* Plan and Solve
+* Reflexion
+* Toolformer
+
+### Multi-Agent Systems
+
+* Orchestrator Pattern
+* Supervisor Pattern
+* Debate Pattern
+* Swarm Agents
+
+### Project
+
+Build:
+
+```
+Research Agent
+      ↓
+Planning Agent
+      ↓
+Coding Agent
+      ↓
+Review Agent
+      ↓
+Report Agent
+```
+
+---
+
+# Phase 6: MCP (Model Context Protocol) (2-3 Weeks)
+
+বর্তমানে Agentic AI এর সবচেয়ে হট বিষয়।
+
+### শিখতে হবে
+
+* MCP Architecture
+* MCP Server
+* MCP Client
+* Tool Discovery
+* Resource Management
+* Context Negotiation
+
+### MCP Servers
+
+* GitHub MCP
+* PostgreSQL MCP
+* Filesystem MCP
+* Browser MCP
+
+### Project
+
+একটি AI Agent বানান যা:
+
+* GitHub Repository Analyze করবে
+* PostgreSQL Query করবে
+* Report Generate করবে
+
+---
+
+# Phase 7: AI Infrastructure (Your Existing Strength)
+
+এখানে আপনার DevOps Experience কাজে লাগবে।
+
+### শিখতে হবে
+
+* Docker
+* Kubernetes
+* GPU Serving
+* Model Deployment
+* API Gateway
+* Redis
+* RabbitMQ
+* Observability
+
+### LLM Serving
+
+* vLLM
+* Ollama
+* Text Generation Inference
+
+---
+
+# Phase 8: Observability & Evaluation (2 Weeks)
+
+### Learn
+
+* LangSmith
+* Arize
+* Weights & Biases
+* OpenTelemetry
+
+### Metrics
+
+* Latency
+* Cost
+* Accuracy
+* Hallucination Rate
+* Tool Success Rate
+
+---
+
+# Portfolio Projects (Must Have)
+
+GitHub-এ অন্তত ৫টি Project রাখুন।
+
+### Project 1
+
+Multi-Agent Research Assistant
+
+### Project 2
+
+AI DevOps Copilot
+
+আপনার DevOps Background কাজে লাগবে।
+
+Features:
+
+* Kubernetes Troubleshooting
+* Log Analysis
+* PostgreSQL Diagnosis
+* Root Cause Analysis
+
+### Project 3
+
+MCP-based GitHub Code Reviewer
+
+### Project 4
+
+RAG Knowledge Assistant
+
+### Project 5
+
+Autonomous Vulnerability Scanner
+
+আপনার Bug Bounty + Security Interest কাজে লাগবে।
+
+---
+
+# YouTube Learning Path
+
+1. [LangChain Official](https://www.langchain.com?utm_source=chatgpt.com)
+2. [LangGraph Documentation](https://langchain-ai.github.io/langgraph/?utm_source=chatgpt.com)
+3. [DeepLearning.AI Short Courses](https://www.deeplearning.ai/short-courses/?utm_source=chatgpt.com)
+4. [Anthropic MCP Documentation](https://modelcontextprotocol.io?utm_source=chatgpt.com)
+5. [Microsoft AI Agents for Beginners](https://github.com/microsoft/ai-agents-for-beginners?utm_source=chatgpt.com)
+
+# আপনার জন্য সবচেয়ে দ্রুত পথ
+
+কারণ আপনি ইতিমধ্যে DevOps, Linux, PostgreSQL, Kubernetes জানেন:
+
+**Python → LLM Fundamentals → LangGraph → RAG → MCP → Multi-Agent Systems → AI Infrastructure**
+
+এই ক্রমে গেলে AI Engineer হওয়ার জন্য নতুন করে Software Engineering শেখার প্রয়োজন হবে না। বরং **AI Infrastructure + Agentic AI + MCP** কম্বিনেশন আপনাকে সাধারণ AI Engineer-এর চেয়ে বেশি মূল্যবান করে তুলবে।
