@@ -1,0 +1,27 @@
+Agenda
+1. Large Language Model (LLM)?
+Ans: A neural network that is trained to predict the next term (token) of an input sequence.
+উদাহরণ: ইনপুট:
+"বাংলাদেশের রাজধানী হলো"
+মডেল পরবর্তী টোকেন হিসেবে অনুমান করবে:
+"ঢাকা"
+2. Tokenization
+3. Vectorization
+4. Attention
+5. Self-Supervised Learning
+6. Transformer
+7. Fine-tuning
+8. Few-shot Prompting
+9. Retrieval Augmented Generation
+10. Vector Database
+11. Model Context Protocol
+12. Context Engineering
+13. Agents
+14. Reinforcement Learning
+15. Chain of Thought
+16. Reasoning Models
+17. Multi-modal Models
+18. Small Language Models
+19. Distillation
+20. Quantization
+
