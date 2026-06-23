@@ -6,22 +6,3549 @@ Ans: A neural network that is trained to predict the next term (token) of an inp
 মডেল পরবর্তী টোকেন হিসেবে অনুমান করবে:
 "ঢাকা"
 2. Tokenization
+Ans: 
+**Tokenization** হলো কোনো টেক্সটকে ছোট ছোট অংশে (Token) ভাগ করার প্রক্রিয়া, যাতে AI মডেল সেটি সহজে প্রক্রিয়া করতে পারে।
+
+### উদাহরণ
+
+বাক্য:
+
+> "I love Bangladesh"
+
+Word Tokenization:
+
+```
+["I", "love", "Bangladesh"]
+```
+
+কিন্তু আধুনিক LLM সাধারণত Subword Tokenization ব্যবহার করে:
+
+```
+["I", " love", " Bang", "ladesh"]
+```
+
+অথবা
+
+```
+["I", " love", " Bangladesh"]
+```
+
+### কেন Tokenization দরকার?
+
+কম্পিউটার সরাসরি শব্দ বোঝে না। তাই:
+
+```
+"I love Bangladesh"
+        ↓
+Tokens
+        ↓
+Token IDs
+        ↓
+Neural Network
+```
+
+উদাহরণ:
+
+| Token      | ID   |
+| ---------- | ---- |
+| I          | 40   |
+| love       | 1842 |
+| Bangladesh | 9123 |
+
+মডেল আসলে এই সংখ্যাগুলো নিয়ে কাজ করে।
+
+### Token-এর ধরন
+
+1. **Character Tokenization**
+
+   ```
+   "CAT"
+   → ["C", "A", "T"]
+   ```
+
+2. **Word Tokenization**
+
+   ```
+   "I love AI"
+   → ["I", "love", "AI"]
+   ```
+
+3. **Subword Tokenization** (LLM-এ সবচেয়ে বেশি ব্যবহৃত)
+
+   ```
+   "unbelievable"
+   → ["un", "believ", "able"]
+   ```
+
+### ChatGPT-তে Token কী?
+
+আনুমানিক:
+
+* 1 Token ≈ ¾ English word
+* 100 Tokens ≈ 75 Words
+* 1000 Tokens ≈ 750 Words
+
+বাংলা ভাষায় Token সংখ্যা সাধারণত ইংরেজির তুলনায় কিছুটা বেশি হতে পারে।
+
+### LLM Pipeline
+
+```
+Text
+ ↓
+Tokenization
+ ↓
+Token IDs
+ ↓
+Embeddings
+ ↓
+Transformer Layers
+ ↓
+Next Token Prediction
+ ↓
+Generated Text
+```
+
+এখানে **Tokenization** হলো LLM-এর প্রথম ধাপ, যা মানুষের লেখা ভাষাকে মডেলের বোঝার উপযোগী সংখ্যায় রূপান্তর করে।
+
+
 3. Vectorization
+================
+**Vectorization** হলো টোকেন (শব্দ বা শব্দাংশ) কে সংখ্যার একটি তালিকা (vector/embedding) তে রূপান্তর করার প্রক্রিয়া, যাতে নিউরাল নেটওয়ার্ক তার অর্থ ও সম্পর্ক বুঝতে পারে।
+
+### LLM-এর ধাপগুলো
+
+```text
+Text
+ ↓
+Tokenization
+ ↓
+Token IDs
+ ↓
+Vectorization (Embedding)
+ ↓
+Transformer
+ ↓
+Next Token Prediction
+```
+
+### উদাহরণ
+
+ধরুন টেক্সট:
+
+```text
+I love Bangladesh
+```
+
+**Tokenization:**
+
+```text
+["I", "love", "Bangladesh"]
+```
+
+**Token IDs:**
+
+```text
+[40, 1842, 9123]
+```
+
+**Vectorization (Embedding):**
+
+```text
+I           → [0.12, -0.34, 0.87, ...]
+love        → [0.91,  0.22, -0.15, ...]
+Bangladesh  → [0.45, -0.78, 0.31, ...]
+```
+
+বাস্তবে প্রতিটি vector-এর 768, 1536, 3072 বা তারও বেশি dimension থাকতে পারে।
+
+### কেন Vectorization দরকার?
+
+মডেল ID নম্বরের অর্থ বোঝে না।
+
+```text
+love → 1842
+hate → 1843
+```
+
+এখানে 1842 এবং 1843 কাছাকাছি হলেও অর্থ সম্পূর্ণ ভিন্ন।
+
+তাই embedding/vector ব্যবহার করা হয়:
+
+```text
+love → [0.91, 0.22, -0.15, ...]
+like → [0.88, 0.25, -0.10, ...]
+hate → [-0.75, 0.12, 0.60, ...]
+```
+
+এখন "love" এবং "like" এর vector কাছাকাছি থাকবে, আর "hate" দূরে থাকবে।
+
+### Embedding Space
+
+একটি embedding space-এ অর্থে কাছাকাছি শব্দগুলোর vector-ও কাছাকাছি অবস্থান করে।
+
+উদাহরণ:
+
+```text
+King  - Man + Woman ≈ Queen
+```
+
+এটি embedding-এর মাধ্যমে সম্ভব হয়।
+
+### Tokenization বনাম Vectorization
+
+| ধাপ                       | কাজ                                   |
+| ------------------------- | ------------------------------------- |
+| Tokenization              | টেক্সটকে Token-এ ভাগ করে              |
+| Token IDs                 | Token-কে সংখ্যা দেয়                  |
+| Vectorization (Embedding) | Token-কে অর্থবহ Vector-এ রূপান্তর করে |
+| Transformer               | Vector-এর সম্পর্ক বিশ্লেষণ করে        |
+
+সংক্ষেপে:
+
+> **Tokenization** টেক্সটকে টোকেনে ভাগ করে, আর **Vectorization (Embedding)** সেই টোকেনগুলোকে এমন সংখ্যার ভেক্টরে রূপান্তর করে যা তাদের অর্থ ও সম্পর্ক ধারণ করে।
+
 4. Attention
+============
+**Attention** হলো Transformer মডেলের সবচেয়ে গুরুত্বপূর্ণ ধারণাগুলোর একটি। এটি মডেলকে একটি বাক্যের কোন কোন শব্দের দিকে বেশি মনোযোগ দিতে হবে তা নির্ধারণ করতে সাহায্য করে।
+
+### সহজ উদাহরণ
+
+বাক্য:
+
+> "The animal didn't cross the street because **it** was too tired."
+
+এখানে "**it**" কাকে বোঝাচ্ছে?
+
+Attention মেকানিজম "it" শব্দটি প্রসেস করার সময় বাক্যের অন্যান্য শব্দের দিকে তাকায় এবং বুঝতে পারে যে "it" সম্ভবত "**animal**" কে নির্দেশ করছে, "street" কে নয়।
+
+### Attention কী করে?
+
+ধরুন:
+
+```text
+I love machine learning
+```
+
+"learning" শব্দটি বুঝতে মডেল অন্যান্য শব্দের দিকে বিভিন্ন মাত্রায় মনোযোগ দেয়:
+
+| Word     | Attention Weight |
+| -------- | ---------------- |
+| I        | 0.05             |
+| love     | 0.25             |
+| machine  | 0.60             |
+| learning | 0.10             |
+
+এখানে "learning" সবচেয়ে বেশি সম্পর্কিত "machine" এর সাথে।
+
+### Self-Attention
+
+Transformer-এ সাধারণত **Self-Attention** ব্যবহৃত হয়।
+
+অর্থাৎ:
+
+> একটি শব্দ একই বাক্যের অন্য সব শব্দের সাথে সম্পর্ক যাচাই করে।
+
+উদাহরণ:
+
+```text
+The cat sat on the mat
+```
+
+"cat" শব্দটি "sat", "mat", "the" ইত্যাদির সাথে সম্পর্ক নির্ণয় করে।
+
+### Q, K, V (Query, Key, Value)
+
+Attention-এর মূল গাণিতিক কাঠামো:
+
+```text
+Token
+  ↓
+Query (Q)
+Key (K)
+Value (V)
+```
+
+* **Query (Q)** → আমি কী খুঁজছি?
+* **Key (K)** → আমার কাছে কী তথ্য আছে?
+* **Value (V)** → আসল তথ্য
+
+Attention Score:
+
+```text
+Attention(Q,K,V)
+=
+softmax(QKᵀ / √d) V
+```
+
+ইন্টারভিউতে এই সূত্রটি প্রায়ই জিজ্ঞাসা করা হয়।
+
+### Multi-Head Attention
+
+একটি Attention Head এক ধরনের সম্পর্ক খুঁজে।
+
+অনেকগুলো Head একসাথে ব্যবহার করলে:
+
+* একটি Head ব্যাকরণ দেখে
+* একটি Head বিষয়বস্তু দেখে
+* একটি Head দূরের শব্দের সম্পর্ক দেখে
+
+এটিকে **Multi-Head Attention** বলে।
+
+### পুরো LLM Pipeline
+
+```text
+Text
+ ↓
+Tokenization
+ ↓
+Token IDs
+ ↓
+Embeddings (Vectorization)
+ ↓
+Positional Encoding
+ ↓
+Multi-Head Attention
+ ↓
+Feed Forward Network
+ ↓
+Next Token Prediction
+```
+
+### এক লাইনে
+
+> **Attention হলো এমন একটি প্রক্রিয়া যা মডেলকে ইনপুটের বিভিন্ন টোকেনের মধ্যে কোনগুলো বেশি গুরুত্বপূর্ণ এবং কীভাবে তারা একে অপরের সাথে সম্পর্কিত তা নির্ধারণ করতে সাহায্য করে।**
+
+এই ধারণাটিই ২০১৭ সালের বিখ্যাত গবেষণাপত্র **Attention Is All You Need**-এর ভিত্তি, যেখান থেকে আধুনিক Transformer এবং LLM-এর সূচনা।
+
+
 5. Self-Supervised Learning
+==============================
+**Self-Supervised Learning (SSL)** হলো এমন একটি Machine Learning পদ্ধতি যেখানে মডেল নিজেই ডেটা থেকে লেবেল (label) তৈরি করে শেখে। মানুষের হাতে আলাদা করে লেবেল দিতে হয় না।
+
+### কেন দরকার?
+
+সাধারণ **Supervised Learning**-এ:
+
+```text
+Image → Cat
+Image → Dog
+Image → Bird
+```
+
+প্রতিটি ডেটার জন্য মানুষের দেওয়া label দরকার।
+
+কিন্তু ইন্টারনেটে থাকা অধিকাংশ ডেটার কোনো label নেই। তাই LLM-গুলো Self-Supervised Learning ব্যবহার করে।
+
+---
+
+### LLM-এ Self-Supervised Learning
+
+ধরুন বাক্য:
+
+```text
+I love machine learning
+```
+
+মডেলের কাজ:
+
+```text
+Input:  I love machine
+Target: learning
+```
+
+অথবা
+
+```text
+Input:  I love
+Target: machine
+```
+
+এখানে target (label) আলাদা করে কেউ দেয়নি। বাক্যের পরের token-টাই label হিসেবে ব্যবহার করা হয়েছে।
+
+তাই একে **Self-Supervised** বলা হয়।
+
+---
+
+### ChatGPT-এর Training
+
+প্রি-ট্রেনিং পর্যায়ে:
+
+```text
+Billions of documents
+        ↓
+Tokenization
+        ↓
+Next Token Prediction
+        ↓
+Loss Calculation
+        ↓
+Model Update
+```
+
+মডেল বারবার পরবর্তী token অনুমান করতে করতে:
+
+* ভাষা শেখে
+* ব্যাকরণ শেখে
+* তথ্য শেখে
+* যুক্তির কিছু প্যাটার্ন শেখে
+
+---
+
+### উদাহরণ
+
+বাক্য:
+
+```text
+The capital of Bangladesh is ___
+```
+
+সঠিক token:
+
+```text
+Dhaka
+```
+
+মডেল ভুল করলে:
+
+```text
+Chittagong
+```
+
+Loss বাড়বে, তারপর weights আপডেট হবে।
+
+এভাবেই শেখে।
+
+---
+
+### Self-Supervised বনাম Supervised
+
+| বিষয়          | Self-Supervised | Supervised |
+| -------------- | --------------- | ---------- |
+| Label কে দেয়? | ডেটা নিজেই      | মানুষ      |
+| ডেটার পরিমাণ   | খুব বড়         | সীমিত      |
+| LLM Training   | ✅               | আংশিক      |
+| খরচ            | কম              | বেশি       |
+
+---
+
+### ChatGPT-এর Training Flow
+
+```text
+1. Self-Supervised Pretraining
+   ↓
+2. Supervised Fine-Tuning (SFT)
+   ↓
+3. RLHF / Preference Optimization
+   ↓
+4. Final Chat Model
+```
+
+---
+
+### এক লাইনে
+
+> **Self-Supervised Learning হলো এমন শেখার পদ্ধতি যেখানে মডেল ডেটার ভেতর থেকেই শেখার লক্ষ্য (label) তৈরি করে, যেমন LLM-এ পরবর্তী token prediction।**
+
+
 6. Transformer
+===============
+**Transformer** হলো আধুনিক LLM-এর মূল Neural Network Architecture, যা টেক্সটের বিভিন্ন শব্দ বা টোকেনের মধ্যে সম্পর্ক বুঝতে **Attention Mechanism** ব্যবহার করে।
+
+বর্তমানের অধিকাংশ জনপ্রিয় LLM যেমন:
+
+* ChatGPT
+* GPT-4
+* Llama
+* Gemini
+
+সবগুলোই Transformer Architecture-এর উপর ভিত্তি করে তৈরি।
+
+---
+
+## Transformer আসার আগে সমস্যা
+
+পুরোনো মডেল:
+
+* RNN (Recurrent Neural Network)
+* LSTM (Long Short-Term Memory)
+
+এগুলো শব্দগুলো একের পর এক প্রসেস করত:
+
+```text
+I → love → machine → learning
+```
+
+সমস্যা:
+
+* ধীরগতির
+* দীর্ঘ বাক্যে আগের তথ্য ভুলে যেত
+* Parallel Processing করতে পারত না
+
+---
+
+## Transformer কীভাবে কাজ করে?
+
+Transformer পুরো বাক্য একসাথে দেখে:
+
+```text
+I love machine learning
+```
+
+এবং প্রতিটি টোকেন অন্য সব টোকেনের সাথে সম্পর্ক বিশ্লেষণ করে।
+
+এটি সম্ভব হয় **Self-Attention** এর মাধ্যমে।
+
+---
+
+## Transformer Architecture
+
+```text
+Input Text
+    ↓
+Tokenization
+    ↓
+Embeddings
+    ↓
+Positional Encoding
+    ↓
+Multi-Head Attention
+    ↓
+Feed Forward Network
+    ↓
+Output Probabilities
+    ↓
+Next Token
+```
+
+---
+
+## 1. Embedding Layer
+
+```text
+Bangladesh
+   ↓
+[0.23, -0.87, 0.45, ...]
+```
+
+শব্দকে Vector-এ রূপান্তর করা হয়।
+
+---
+
+## 2. Positional Encoding
+
+Transformer নিজে শব্দের অবস্থান জানে না।
+
+তাই:
+
+```text
+I love AI
+AI love I
+```
+
+এদের পার্থক্য বোঝানোর জন্য Position Information যোগ করা হয়।
+
+---
+
+## 3. Self-Attention
+
+ধরুন:
+
+```text
+The cat sat on the mat
+```
+
+"cat" শব্দটি:
+
+* sat
+* mat
+* the
+
+এর সাথে সম্পর্ক পরীক্ষা করে।
+
+Attention নির্ধারণ করে কোন শব্দ কতটা গুরুত্বপূর্ণ।
+
+---
+
+## 4. Multi-Head Attention
+
+একটি Head:
+
+```text
+Grammar
+```
+
+অন্যটি:
+
+```text
+Meaning
+```
+
+আরেকটি:
+
+```text
+Long-range relationship
+```
+
+একসাথে অনেক ধরনের সম্পর্ক শেখে।
+
+---
+
+## 5. Feed Forward Network
+
+Attention থেকে পাওয়া তথ্য আরও প্রসেস করা হয়।
+
+```text
+Attention Output
+      ↓
+Feed Forward Layer
+      ↓
+Better Representation
+```
+
+---
+
+## Encoder এবং Decoder
+
+মূল Transformer-এ দুই অংশ ছিল:
+
+```text
+Encoder
+   ↓
+Decoder
+```
+
+### Encoder
+
+ইনপুট বুঝে।
+
+উদাহরণ:
+
+* Translation
+* Classification
+
+### Decoder
+
+নতুন টেক্সট তৈরি করে।
+
+উদাহরণ:
+
+* GPT
+* ChatGPT
+
+---
+
+## GPT কেন Transformer?
+
+GPT =
+
+> **Generative Pre-trained Transformer**
+
+এটি মূল Transformer-এর **Decoder অংশ** ব্যবহার করে টেক্সট জেনারেট করে।
+
+---
+
+## কেন Transformer এত গুরুত্বপূর্ণ?
+
+✔ দীর্ঘ Context বুঝতে পারে
+✔ Parallel Processing করতে পারে
+✔ বড় স্কেলে Training করা যায়
+✔ Self-Attention ব্যবহার করে সম্পর্ক বোঝে
+✔ LLM-এর ভিত্তি
+
+---
+
+## Interview Definition
+
+> **Transformer is a neural network architecture introduced in the 2017 paper "Attention Is All You Need" that relies on self-attention mechanisms to process sequences in parallel and learn relationships between tokens.**
+
+মূল গবেষণাপত্র: Attention Is All You Need
+
+### LLM শেখার ধারাবাহিকতা
+
+```text
+Text
+ ↓
+Tokenization
+ ↓
+Token IDs
+ ↓
+Embeddings (Vectorization)
+ ↓
+Positional Encoding
+ ↓
+Self-Attention
+ ↓
+Transformer Layers
+ ↓
+Next Token Prediction
+ ↓
+Generated Text
+```
+
+এই Pipeline-টাই GPT, ChatGPT এবং আধুনিক LLM-এর ভিত্তি।
+
+
 7. Fine-tuning
 8. Few-shot Prompting
 9. Retrieval Augmented Generation
-10. Vector Database
-11. Model Context Protocol
-12. Context Engineering
-13. Agents
-14. Reinforcement Learning
-15. Chain of Thought
-16. Reasoning Models
-17. Multi-modal Models
-18. Small Language Models
-19. Distillation
-20. Quantization
+## Retrieval Augmented Generation (RAG)
 
+**RAG** হলো এমন একটি আর্কিটেকচার যেখানে LLM নিজে সব তথ্য মনে রাখার বদলে বাহ্যিক ডকুমেন্ট বা ডাটাবেস থেকে তথ্য “খুঁজে এনে” উত্তর তৈরি করে।
+
+---
+
+## কেন RAG দরকার?
+
+LLM-এর সমস্যা:
+
+* সব নতুন তথ্য জানে না
+* training data পুরোনো হতে পারে
+* private company data access নেই
+
+RAG এই সমস্যার সমাধান করে।
+
+---
+
+## RAG কীভাবে কাজ করে
+
+```text id="r2xk9a"
+User Question
+     ↓
+Query Embedding
+     ↓
+Vector Search (similar docs)
+     ↓
+Top relevant chunks
+     ↓
+LLM (context + question)
+     ↓
+Answer
+```
+
+---
+
+## সহজ উদাহরণ
+
+User:
+
+> "আমাদের কোম্পানির leave policy কী?"
+
+RAG flow:
+
+1. প্রশ্ন আসে
+2. system খুঁজে:
+
+   * HR PDF
+   * policy document
+   * wiki page
+3. relevant অংশ বের করে
+4. LLM সেই তথ্য ব্যবহার করে উত্তর দেয়
+
+---
+
+## Vector Search অংশ
+
+ডকুমেন্ট আগে convert করা থাকে:
+
+```text id="p8qk1d"
+Text → Embedding → Vector DB
+```
+
+Query আসে:
+
+```text id="l9m2fd"
+User question → Embedding
+```
+
+তারপর similarity search হয়:
+
+* cosine similarity
+* nearest vectors
+
+---
+
+## RAG Architecture
+
+```text id="t7k3md"
+Documents → Chunking → Embedding → Vector DB
+                                 ↑
+User Query → Embedding → Retrieval
+                                 ↓
+                           Context + LLM
+                                 ↓
+                              Answer
+```
+
+---
+
+## Chunking কী?
+
+বড় ডকুমেন্ট ছোট অংশে ভাগ করা:
+
+```text id="c2v9ab"
+Policy PDF
+↓
+Chunk 1: Leave rules
+Chunk 2: Holiday policy
+Chunk 3: Salary rules
+```
+
+---
+
+## RAG vs Fine-tuning
+
+| বিষয়            | RAG             | Fine-tuning      |
+| ---------------- | --------------- | ---------------- |
+| Knowledge update | সহজ             | কঠিন             |
+| Cost             | কম              | বেশি             |
+| Speed            | slightly slower | faster inference |
+| Use case         | dynamic data    | fixed behavior   |
+
+---
+
+## RAG-এর সুবিধা
+
+✔ Always up-to-date
+✔ Company/private data use করা যায়
+✔ Hallucination কমে
+✔ Explainable (source থাকে)
+
+---
+
+## বাস্তব ব্যবহার
+
+* Chatbot for company docs
+* Legal document assistant
+* Medical knowledge system
+* Customer support bot
+* Codebase assistant
+
+---
+
+## RAG-এর সমস্যা
+
+* retrieval ভুল হলে answer ভুল হবে
+* vector search tuning দরকার
+* chunking strategy গুরুত্বপূর্ণ
+* latency কিছুটা বাড়ে
+
+---
+
+## Advanced RAG
+
+Modern systems এ থাকে:
+
+* re-ranking model
+* hybrid search (keyword + vector)
+* metadata filtering
+* memory caching
+
+---
+
+## এক লাইনে
+
+> **RAG হলো এমন একটি system যেখানে LLM আগে external knowledge retrieve করে তারপর সেই তথ্য ব্যবহার করে উত্তর তৈরি করে।**
+
+---
+
+## LLM Pipeline-এ RAG
+
+```text id="z8q1lp"
+User Query
+   ↓
+Retrieval (Vector DB)
+   ↓
+Context Augmentation
+   ↓
+LLM Generation
+   ↓
+Final Answer
+```
+
+---
+
+চাওলে আমি তোমাকে next step হিসেবে **RAG system design (real production architecture)** বা **FAISS / Pinecone দিয়ে practical setup** দেখাতে পারি।
+
+
+10. Vector Database
+## Vector Database
+
+**Vector Database** হলো এমন একটি ডাটাবেস যেখানে টেক্সট, ছবি বা অন্য ডেটাকে **embedding (vector)** আকারে সংরক্ষণ করা হয় এবং পরে সেই ভেক্টরগুলোর মধ্যে similarity search করা হয়।
+
+LLM + RAG সিস্টেমের একটি গুরুত্বপূর্ণ অংশ।
+
+---
+
+## সহজভাবে বুঝুন
+
+Normal database:
+
+```text id="a1b2c3"
+SELECT * FROM docs WHERE title = "leave policy"
+```
+
+Vector database:
+
+```text id="d4e5f6"
+Find meaning similar to: "company leave rules"
+```
+
+---
+
+## কেন দরকার?
+
+কারণ LLM-এর জন্য “meaning” গুরুত্বপূর্ণ, exact word না।
+
+উদাহরণ:
+
+* "vacation policy"
+* "leave rules"
+* "holiday policy"
+
+সব একই অর্থ, কিন্তু শব্দ আলাদা।
+
+Vector DB এগুলোকে একই cluster-এ রাখে।
+
+---
+
+## কাজ করার প্রক্রিয়া
+
+### 1. Embedding তৈরি
+
+```text id="v1x2y3"
+"leave policy document"
+   ↓
+[0.12, -0.88, 0.44, ...]
+```
+
+---
+
+### 2. Store in Vector DB
+
+```text id="s9k8l7"
+Vector + metadata
+```
+
+Metadata:
+
+* document name
+* section
+* timestamp
+* user access
+
+---
+
+### 3. Query আসলে
+
+```text id="q1w2e3"
+"What is leave policy?"
+```
+
+→ embedding তৈরি হয়
+
+---
+
+### 4. Similarity Search
+
+```text id="m9n8b7"
+cosine similarity / dot product
+```
+
+Nearest vectors বের হয়:
+
+* HR policy PDF
+* leave rules section
+* vacation guidelines
+
+---
+
+### 5. Result → LLM
+
+```text id="h3j4k5"
+Retrieved context + question → LLM → Answer
+```
+
+---
+
+## Architecture (RAG context)
+
+```text id="r9t8y7"
+Documents
+   ↓
+Chunking
+   ↓
+Embedding Model
+   ↓
+Vector Database
+   ↓
+Similarity Search
+   ↓
+LLM Generation
+```
+
+---
+
+## জনপ্রিয় Vector Databases
+
+* FAISS (Meta)
+* Pinecone
+* Weaviate
+* Milvus
+* Chroma
+
+---
+
+## Key Features
+
+### 1. Similarity Search
+
+Exact match না, meaning-based match
+
+---
+
+### 2. High-dimensional storage
+
+Vector usually:
+
+* 384 dimensions
+* 768 dimensions
+* 1536+ dimensions
+
+---
+
+### 3. Fast retrieval
+
+Billions of vectors থেকেও দ্রুত search
+
+---
+
+### 4. Metadata filtering
+
+Example:
+
+```text id="f2g3h4"
+department = "HR"
+date > 2024
+```
+
+---
+
+## Vector DB vs Traditional DB
+
+| Feature  | Traditional DB | Vector DB           |
+| -------- | -------------- | ------------------- |
+| Search   | Exact match    | Semantic similarity |
+| Data     | structured     | embeddings          |
+| Query    | SQL            | similarity search   |
+| Use case | apps, records  | AI, RAG             |
+
+---
+
+## Real-world Use Cases
+
+* Chatbot with company documents
+* Search engines (semantic search)
+* Recommendation systems (Netflix, YouTube)
+* AI coding assistants
+* Knowledge base QA systems
+
+---
+
+## Why it matters in LLM
+
+LLM নিজে সব তথ্য মনে রাখে না।
+
+Vector DB দেয়:
+
+✔ external memory
+✔ updated knowledge
+✔ private data access
+✔ context injection
+
+---
+
+## One-line Definition
+
+> **Vector Database হলো এমন একটি ডাটাবেস যা embeddings সংরক্ষণ করে এবং অর্থের ভিত্তিতে সবচেয়ে কাছাকাছি তথ্য দ্রুত খুঁজে বের করে।**
+
+---
+
+## LLM System Flow (RAG + Vector DB)
+
+```text id="z7x6c5"
+User Query
+   ↓
+Embedding
+   ↓
+Vector DB Search
+   ↓
+Top-K relevant chunks
+   ↓
+LLM
+   ↓
+Answer
+```
+
+---
+
+চাওলে আমি next step হিসেবে তোমাকে **FAISS দিয়ে simple vector database বানানো** বা **Pinecone + RAG full project architecture** দেখাতে পারি।
+
+11. Model Context Protocol
+## Model Context Protocol (MCP)
+
+**Model Context Protocol (MCP)** হলো একটি standard way, যার মাধ্যমে AI model (LLM) বাইরের tools, data sources, এবং services-এর সাথে নিরাপদ ও structuredভাবে কথা বলতে পারে।
+
+সহজভাবে:
+
+> MCP হলো LLM-এর জন্য “USB-C port”-এর মতো একটি universal interface, যেটা দিয়ে model বিভিন্ন system plug-in করতে পারে।
+
+---
+
+## কেন MCP দরকার?
+
+আগে সমস্যা ছিল:
+
+* প্রতিটা tool integration আলাদাভাবে বানাতে হতো
+* এক system থেকে অন্য system-এ connect করা messy ছিল
+* RAG, APIs, database, tools সব আলাদা আলাদা way-তে কাজ করত
+
+MCP এই fragmentation কমায়।
+
+---
+
+## MCP কীভাবে কাজ করে
+
+```text id="mcp1"
+User → LLM → MCP Layer → Tools / APIs / Databases → Result → LLM → Answer
+```
+
+---
+
+## MCP Architecture
+
+### 1. Model (LLM)
+
+* reasoning করে
+* decide করে কোন tool লাগবে
+
+### 2. MCP Client
+
+* LLM-এর ভিতরে থাকে
+* request format তৈরি করে
+
+### 3. MCP Server
+
+* actual data/tools expose করে
+* database / API / file system access দেয়
+
+---
+
+## Simple Example
+
+User:
+
+> “আমার কোম্পানির leave policy কী?”
+
+Flow:
+
+```text id="mcp2"
+LLM decides → "HR docs needed"
+        ↓
+MCP call → HR Document Server
+        ↓
+Fetch relevant section
+        ↓
+Return to LLM
+        ↓
+Final answer
+```
+
+---
+
+## MCP কী কী করতে পারে?
+
+* Database query
+* File system access
+* API calls (weather, finance, etc.)
+* RAG retrieval
+* Internal company tools
+
+---
+
+## MCP vs Traditional Tool Calling
+
+| Feature      | Old Tool Calling | MCP               |
+| ------------ | ---------------- | ----------------- |
+| Integration  | custom per tool  | standard protocol |
+| Scalability  | hard             | easy              |
+| Reusability  | low              | high              |
+| Architecture | messy            | unified           |
+
+---
+
+## MCP Request Example (conceptual)
+
+```json id="mcp3"
+{
+  "tool": "vector_search",
+  "query": "leave policy",
+  "top_k": 5
+}
+```
+
+Server response:
+
+```json id="mcp4"
+{
+  "results": ["Leave policy section 3", "Holiday rules"]
+}
+```
+
+---
+
+## MCP vs RAG
+
+| Concept | Role                             |
+| ------- | -------------------------------- |
+| RAG     | retrieval + generation strategy  |
+| MCP     | communication protocol for tools |
+
+👉 RAG often uses MCP underneath
+
+---
+
+## MCP use cases
+
+* AI coding assistant (reads repo, runs code)
+* Enterprise chatbot (HR, finance systems)
+* Agent systems (multi-tool AI)
+* DevOps automation AI
+
+---
+
+## Real-world analogy
+
+Think:
+
+* LLM = brain
+* MCP = nervous system interface
+* Tools = hands, eyes, memory
+
+Without MCP:
+
+* brain can't easily control tools
+
+With MCP:
+
+* brain can seamlessly use everything
+
+---
+
+## Where MCP fits in LLM stack
+
+```text id="mcp5"
+User Input
+   ↓
+LLM (Reasoning)
+   ↓
+MCP Layer
+   ↓
+Tools / APIs / DB / Vector DB
+   ↓
+Returned Context
+   ↓
+LLM Response
+```
+
+---
+
+## One-line definition
+
+> **Model Context Protocol (MCP) হলো একটি standard protocol যা LLM-কে বিভিন্ন external tools, data sources, এবং services-এর সাথে structuredভাবে সংযুক্ত করে।**
+
+---
+
+চাওলে আমি তোমাকে **MCP server design (real implementation in Python / Node.js)** বা **MCP vs LangChain vs LlamaIndex comparison** দেখাতে পারি।
+
+
+12. Context Engineering
+==========================
+## Context Engineering
+
+**Context Engineering** হলো এমন একটি প্র্যাকটিস যেখানে LLM-কে ভালো উত্তর দেওয়ার জন্য শুধু prompt না, বরং পুরো “input environment” ডিজাইন করা হয়।
+
+সহজভাবে:
+
+> LLM কী দেখবে, কী জানবে, কোন তথ্য আগে পাবে, কোন tools ব্যবহার করবে — সবকিছু ঠিক করে দেওয়াই Context Engineering।
+
+---
+
+## কেন এটা দরকার?
+
+LLM নিজে:
+
+* ভুল তথ্য hallucinate করতে পারে
+* সীমিত context window-তে কাজ করে
+* বাইরে থাকা data জানে না
+
+তাই ভালো output পেতে context carefully তৈরি করতে হয়।
+
+---
+
+## Context Engineering কী কী নিয়ে কাজ করে
+
+### 1. System Prompt Design
+
+Model-এর আচরণ নির্ধারণ করে।
+
+```text id="ce1"
+You are a helpful coding assistant.
+Answer concisely and use examples.
+```
+
+---
+
+### 2. User Prompt Structuring
+
+User input পরিষ্কার ও structured করা।
+
+---
+
+### 3. RAG Context Injection
+
+Vector DB থেকে relevant তথ্য এনে prompt-এ যোগ করা।
+
+```text id="ce2"
+Context:
+- HR policy says leave = 20 days
+- Sick leave allowed separately
+
+Question: What is leave policy?
+```
+
+---
+
+### 4. Memory / Conversation History
+
+আগের কথা মনে রাখা।
+
+---
+
+### 5. Tool Context (MCP)
+
+API, database, search tools যোগ করা।
+
+---
+
+### 6. Output Constraints
+
+Output format control করা:
+
+* JSON
+* bullet points
+* code only
+* step-by-step reasoning
+
+---
+
+## Full Context Pipeline
+
+```text id="ce3"
+User Query
+   ↓
+System Prompt
+   ↓
+Conversation Memory
+   ↓
+Retrieved Docs (RAG)
+   ↓
+Tool Outputs (MCP)
+   ↓
+Final Prompt Context
+   ↓
+LLM Response
+```
+
+---
+
+## Context Engineering vs Prompt Engineering
+
+| বিষয়      | Prompt Engineering | Context Engineering              |
+| ---------- | ------------------ | -------------------------------- |
+| Focus      | শুধু prompt        | পুরো system context              |
+| Scope      | ছোট                | বড় (end-to-end)                 |
+| Includes   | instructions       | memory + RAG + tools + structure |
+| Complexity | low                | high                             |
+
+---
+
+## উদাহরণ
+
+### শুধু Prompt Engineering:
+
+```text id="ce4"
+Explain leave policy.
+```
+
+---
+
+### Context Engineering:
+
+```text id="ce5"
+System:
+You are HR assistant.
+
+Context:
+- Company has 20 leave days
+- 10 sick leave allowed
+- RAG docs attached
+
+Tools:
+- HR database query enabled
+
+User:
+What is leave policy?
+```
+
+👉 এখানে model অনেক বেশি accurate হবে
+
+---
+
+## Context Engineering-এর লক্ষ্য
+
+✔ hallucination কমানো
+✔ accuracy বাড়ানো
+✔ consistent behavior
+✔ better reasoning
+✔ tool use improve করা
+
+---
+
+## Real-world use cases
+
+* Enterprise AI assistant
+* RAG-based chatbots
+* AI agents (Auto workflows)
+* Coding assistants
+* Customer support systems
+
+---
+
+## Advanced Idea
+
+Modern AI systems এ context becomes dynamic:
+
+```text id="ce6"
+Context = f(system + memory + retrieved data + tools + user intent)
+```
+
+👉 এটা runtime এ তৈরি হয়
+
+---
+
+## এক লাইনে
+
+> **Context Engineering হলো এমন একটি প্রক্রিয়া যেখানে LLM-এর জন্য সঠিক তথ্য, নির্দেশনা, memory, এবং tools মিলিয়ে একটি optimized input environment তৈরি করা হয়।**
+
+---
+
+## LLM Stack-এ অবস্থান
+
+```text id="ce7"
+Prompt Engineering
+      ↓
+Context Engineering
+      ↓
+RAG + MCP + Memory
+      ↓
+Agent Systems
+```
+
+---
+
+চাওলে আমি তোমাকে next step হিসেবে **real production context engineering design (ChatGPT-like system architecture)** বা **RAG + MCP + memory একসাথে কীভাবে combine করে agent বানায়** সেটা দেখাতে পারি।
+
+
+13. Agents
+=============
+## Agents (AI Agents)
+
+**AI Agent** হলো এমন একটি system যা শুধু প্রশ্নের উত্তর দেয় না, বরং একটি goal পেলে নিজে নিজে পরিকল্পনা করে, tool ব্যবহার করে, এবং কাজ সম্পন্ন করার চেষ্টা করে।
+
+সহজভাবে:
+
+> Agent = LLM + Planning + Tools + Memory + Action loop
+
+---
+
+## LLM vs Agent
+
+| বিষয়          | LLM        | Agent           |
+| ------------- | ---------- | --------------- |
+| কাজ           | উত্তর দেয় | কাজ সম্পন্ন করে |
+| আচরণ          | passive    | active          |
+| tools ব্যবহার | সীমিত      | স্বয়ংক্রিয়    |
+| planning      | নেই        | আছে             |
+
+---
+
+## Agent কীভাবে কাজ করে
+
+```text id="ag1"
+Goal → Think → Plan → Act → Observe → Repeat
+```
+
+---
+
+## Agent Loop (মূল ধারণা)
+
+### 1. Goal
+
+User দেয় কাজ:
+
+> “আমার জন্য একটা travel plan বানাও”
+
+---
+
+### 2. Think (Reasoning)
+
+Agent বুঝে:
+
+* কী করতে হবে
+* কোন তথ্য দরকার
+
+---
+
+### 3. Plan
+
+```text id="ag2"
+Step 1: destination research
+Step 2: budget check
+Step 3: itinerary design
+```
+
+---
+
+### 4. Act (Tools use)
+
+* web search
+* database query
+* API call
+* RAG retrieval
+
+---
+
+### 5. Observe
+
+Result দেখে:
+
+* ঠিক হলো কি না
+* আরও তথ্য দরকার কি না
+
+---
+
+### 6. Loop
+
+যতক্ষণ goal complete না হয়
+
+---
+
+## Agent Architecture
+
+```text id="ag3"
+User Goal
+   ↓
+LLM (Planner)
+   ↓
+Tool Selector (MCP)
+   ↓
+Memory (Context Engineering)
+   ↓
+Execution Engine
+   ↓
+Feedback Loop
+   ↓
+Final Output
+```
+
+---
+
+## Agent-এর components
+
+### 1. Brain (LLM)
+
+Decision making
+
+---
+
+### 2. Tools
+
+* Search engine
+* Database
+* APIs
+* Code runner
+
+---
+
+### 3. Memory
+
+* short-term memory (conversation)
+* long-term memory (vector DB)
+
+---
+
+### 4. Planner
+
+Task breakdown করে
+
+---
+
+## Agent Example
+
+User:
+
+> “আমার জন্য একটা e-commerce website বানাও”
+
+Agent করবে:
+
+```text id="ag4"
+1. requirements analyze
+2. tech stack select
+3. backend code generate
+4. frontend design
+5. database setup
+6. testing
+```
+
+---
+
+## Types of Agents
+
+### 1. Reactive Agent
+
+* immediate response
+* no planning
+
+---
+
+### 2. Planning Agent
+
+* step-by-step plan তৈরি করে
+
+---
+
+### 3. Tool-Using Agent
+
+* APIs / DB ব্যবহার করে
+
+---
+
+### 4. Autonomous Agent
+
+* নিজের goal refine করে
+* multi-step execution করে
+
+---
+
+### 5. Multi-Agent System
+
+* একাধিক agent একসাথে কাজ করে
+
+Example:
+
+* research agent
+* coding agent
+* review agent
+
+---
+
+## Agent Frameworks
+
+* LangChain Agents
+* AutoGPT
+* CrewAI
+* OpenAI Assistants (tool-based systems)
+
+---
+
+## Agents vs Chatbots
+
+| Feature        | Chatbot | Agent     |
+| -------------- | ------- | --------- |
+| conversation   | yes     | yes       |
+| task execution | no      | yes       |
+| autonomy       | low     | high      |
+| tool usage     | limited | extensive |
+
+---
+
+## Real-world use cases
+
+* AI coding assistant
+* DevOps automation
+* research assistant
+* business workflow automation
+* cybersecurity analysis
+* data processing pipelines
+
+---
+
+## Example workflow (realistic)
+
+```text id="ag5"
+User: "Find best laptop under $1000 and compare"
+
+Agent:
+→ search laptops
+→ collect specs
+→ compare features
+→ rank options
+→ generate report
+```
+
+---
+
+## Key idea
+
+> Agent শুধু text generate করে না, বরং “thinking + acting + learning loop” চালায়।
+
+---
+
+## Agents কোথায় ফিট করে LLM stack-এ
+
+```text id="ag6"
+LLM
+ ↓
+RAG + Tools (MCP)
+ ↓
+Context Engineering
+ ↓
+Agents
+ ↓
+Autonomous Systems
+```
+
+---
+
+## এক লাইনে
+
+> **AI Agent হলো এমন একটি LLM-based system যা goal পেলে নিজে পরিকল্পনা করে, tools ব্যবহার করে, এবং iterativeভাবে কাজ সম্পন্ন করে।**
+
+---
+
+চাওলে আমি তোমাকে next step হিসেবে **Agent architecture in production (AutoGPT vs LangGraph vs CrewAI)** বা **একটা simple agent Python দিয়ে বানানো** দেখাতে পারি।
+
+
+14. Reinforcement Learning
+==========================
+## Reinforcement Learning (RL)
+
+**Reinforcement Learning** হলো এমন একটি learning method যেখানে একটি model “trial and error” এর মাধ্যমে শেখে এবং ভালো কাজ করলে reward পায়, ভুল করলে penalty পায়।
+
+সহজভাবে:
+
+> RL = এমন শেখা যেখানে AI নিজের কাজের ফল দেখে ধীরে ধীরে ভালো সিদ্ধান্ত নিতে শেখে।
+
+---
+
+## মূল ধারণা
+
+একটা AI agent থাকে যেটা একটি environment-এর সাথে interact করে:
+
+```text id="rl1"
+Agent → Action → Environment → Reward → New State → Agent
+```
+
+---
+
+## উদাহরণ (simple)
+
+একটা game খেলছে AI:
+
+* Move right → +10 reward
+* Hit wall → -5 penalty
+* Reach goal → +100 reward
+
+এভাবেই AI শিখে কোন move ভালো।
+
+---
+
+## RL-এর components
+
+### 1. Agent
+
+Decision maker (AI model)
+
+---
+
+### 2. Environment
+
+যে system-এর ভিতরে কাজ হচ্ছে
+(যেমন game, robot world, app)
+
+---
+
+### 3. State
+
+বর্তমান পরিস্থিতি
+
+```text id="rl2"
+Position, score, situation
+```
+
+---
+
+### 4. Action
+
+Agent কী করবে:
+
+* move left
+* move right
+* click button
+* answer question
+
+---
+
+### 5. Reward
+
+Feedback signal:
+
+* positive → ভালো কাজ
+* negative → ভুল কাজ
+
+---
+
+## RL Learning Process
+
+```text id="rl3"
+State → Action → Reward → Update Policy → Repeat
+```
+
+---
+
+## Policy কী?
+
+Policy হলো AI-এর decision rule:
+
+> কোন state-এ কোন action নেবে
+
+---
+
+## LLM-এ RL কীভাবে ব্যবহার হয়?
+
+LLM training pipeline:
+
+```text id="rl4"
+Pretraining (self-supervised)
+        ↓
+Supervised Fine-tuning
+        ↓
+Reinforcement Learning (RLHF)
+```
+
+---
+
+## RLHF (Reinforcement Learning from Human Feedback)
+
+LLM-এর জন্য সবচেয়ে গুরুত্বপূর্ণ RL variant
+
+### কীভাবে কাজ করে:
+
+1. Model multiple answers দেয়
+2. Human best answer choose করে
+3. Reward model শেখে
+4. Policy model improve হয়
+
+---
+
+## Example (ChatGPT style)
+
+User:
+
+> “Explain gravity”
+
+Model 3 answers দেয়:
+
+* A (bad)
+* B (good)
+* C (best)
+
+Human selects C → model learns C is better
+
+---
+
+## Reward Model
+
+একটা separate model:
+
+> কোন output ভালো, কোনটা খারাপ সেটা score করে
+
+---
+
+## Exploration vs Exploitation
+
+| বিষয়         | অর্থ                          |
+| ------------ | ----------------------------- |
+| Exploration  | নতুন কিছু try করা             |
+| Exploitation | best known method ব্যবহার করা |
+
+---
+
+## RL Algorithms (basic)
+
+* Q-Learning
+* Policy Gradient
+* Actor-Critic
+
+---
+
+## Simple Q-learning idea
+
+```text id="rl5"
+Q(state, action) = expected reward
+```
+
+AI শেখে কোন action সবচেয়ে লাভজনক।
+
+---
+
+## RL কোথায় ব্যবহার হয়?
+
+* Game AI (Chess, AlphaGo)
+* Robotics
+* Recommendation systems
+* Self-driving cars
+* LLM alignment (RLHF)
+
+---
+
+## RL vs Supervised Learning
+
+| Feature        | Supervised     | RL                |
+| -------------- | -------------- | ----------------- |
+| data           | labeled        | interaction-based |
+| feedback       | direct answer  | reward signal     |
+| learning style | static         | dynamic           |
+| use case       | classification | decision making   |
+
+---
+
+## RL-এর সমস্যা
+
+* training slow
+* unstable learning
+* reward design কঠিন
+* expensive compute
+
+---
+
+## LLM context-এ RL কেন গুরুত্বপূর্ণ?
+
+✔ human-like behavior alignment
+✔ safer responses
+✔ better helpfulness
+✔ reduce hallucination
+
+---
+
+## Full LLM Training Pipeline
+
+```text id="rl6"
+1. Self-Supervised Learning
+        ↓
+2. Supervised Fine-tuning
+        ↓
+3. RLHF (Reinforcement Learning)
+        ↓
+Final Chat Model
+```
+
+---
+
+## এক লাইনে
+
+> **Reinforcement Learning হলো এমন একটি learning method যেখানে AI reward এবং penalty-এর ভিত্তিতে trial-and-error করে নিজের behavior optimize করে।**
+
+---
+
+চাওলে আমি next step হিসেবে **RLHF deep architecture**, বা **PPO algorithm (যেটা ChatGPT training-এ ব্যবহার হয়)** খুব সহজভাবে বুঝিয়ে দিতে পারি।
+
+
+15. Chain of Thought
+====================
+## Chain of Thought (CoT)
+
+**Chain of Thought** হলো এমন একটি prompting/reasoning technique যেখানে LLM কোনো সমস্যার উত্তর দেওয়ার আগে ধাপে ধাপে চিন্তা করে সমাধানে পৌঁছে।
+
+সহজভাবে:
+
+> CoT = “এক লাফে উত্তর না দিয়ে ধাপে ধাপে reasoning করা”
+
+---
+
+## কেন দরকার?
+
+LLM যদি সরাসরি উত্তর দেয়, তাহলে জটিল সমস্যায় ভুল করতে পারে।
+
+CoT দিলে:
+
+* reasoning ভালো হয়
+* multi-step problem solve করা সহজ হয়
+* math, logic, planning উন্নত হয়
+
+---
+
+## Example (without CoT)
+
+প্রশ্ন:
+
+> 12 × 15 = ?
+
+LLM:
+
+> 180
+
+---
+
+## Example (with CoT)
+
+```text id="cot1"
+12 × 15
+= 12 × (10 + 5)
+= (12 × 10) + (12 × 5)
+= 120 + 60
+= 180
+```
+
+👉 ধাপে ধাপে চিন্তা করার ফলে accuracy বাড়ে।
+
+---
+
+## CoT কীভাবে কাজ করে?
+
+```text id="cot2"
+Problem
+   ↓
+Break into steps
+   ↓
+Step-by-step reasoning
+   ↓
+Final answer
+```
+
+---
+
+## Natural Language Chain of Thought
+
+```text id="cot3"
+Q: Why is the sky blue?
+
+A:
+1. Sunlight contains many colors
+2. Blue light scatters more in atmosphere
+3. So we see more blue light
+Answer: sky appears blue
+```
+
+---
+
+## CoT vs Normal Prompting
+
+| Feature        | Normal   | Chain of Thought |
+| -------------- | -------- | ---------------- |
+| reasoning      | implicit | explicit         |
+| accuracy       | lower    | higher           |
+| complex tasks  | weak     | strong           |
+| explainability | low      | high             |
+
+---
+
+## CoT কোথায় বেশি কাজে লাগে?
+
+* Math problems
+* Coding logic
+* Logical puzzles
+* Planning tasks
+* Multi-step reasoning
+
+---
+
+## Types of Chain of Thought
+
+### 1. Zero-shot CoT
+
+Model নিজে থেকে step-by-step ভাবে চিন্তা করে
+
+Prompt:
+
+> “Let’s think step by step”
+
+---
+
+### 2. Few-shot CoT
+
+Example দেখিয়ে শেখানো
+
+```text id="cot4"
+Q: 5 + 3 = ?
+A: 5 + 3 = 8
+
+Q: 10 + 7 = ?
+A: 10 + 7 = 17
+```
+
+---
+
+### 3. Auto CoT
+
+Model নিজেই reasoning structure তৈরি করে
+
+---
+
+## Important Insight
+
+CoT আসলে নতুন model না, বরং:
+
+> prompting technique + reasoning behavior shaping
+
+---
+
+## LLM pipeline-এ CoT
+
+```text id="cot5"
+User Question
+   ↓
+Prompt (CoT enabled)
+   ↓
+Step-by-step reasoning inside model
+   ↓
+Final answer
+```
+
+---
+
+## CoT কেন কাজ করে?
+
+কারণ LLM:
+
+* pattern recognition করে
+* training data-তে reasoning patterns দেখে
+* intermediate steps generate করলে ভুল কমে
+
+---
+
+## Advanced Idea: Hidden vs Visible CoT
+
+* Some models internally think step-by-step
+* কিন্তু সব reasoning user-কে দেখায় না
+
+---
+
+## Limitations
+
+* অনেক বেশি verbose output
+* সবসময় correct নয়
+* sensitive reasoning expose করা সব ক্ষেত্রে ভালো না
+
+---
+
+## এক লাইনে
+
+> **Chain of Thought হলো এমন একটি reasoning technique যেখানে LLM সমস্যাকে ছোট ছোট ধাপে ভাগ করে চিন্তা করে এবং তারপর উত্তর দেয়।**
+
+---
+
+চাওলে আমি next step হিসেবে **Tree of Thought (ToT)** বা **Reasoning Models (GPT-4 level thinking systems)** খুব সহজভাবে বুঝিয়ে দিতে পারি।
+
+16. Reasoning Models
+=====================
+## Reasoning Models
+
+**Reasoning Models** হলো এমন AI models যেগুলো শুধু text generate করে না, বরং জটিল সমস্যায় ধাপে ধাপে চিন্তা করে সঠিক সিদ্ধান্তে পৌঁছানোর জন্য বিশেষভাবে optimize করা থাকে।
+
+সহজভাবে:
+
+> Reasoning Model = এমন LLM যা “ভালো উত্তর” দেওয়ার চেয়ে “সঠিকভাবে চিন্তা করে উত্তর” দেওয়াকে prioritize করে।
+
+---
+
+## সাধারণ LLM vs Reasoning Model
+
+| বিষয়        | সাধারণ LLM            | Reasoning Model        |
+| ----------- | --------------------- | ---------------------- |
+| কাজ         | next token prediction | structured thinking    |
+| math/logic  | মাঝারি                | শক্তিশালী              |
+| planning    | দুর্বল                | ভালো                   |
+| consistency | কম                    | বেশি                   |
+| approach    | pattern-based         | step-by-step reasoning |
+
+---
+
+## Reasoning Model কীভাবে কাজ করে?
+
+```text id="rm1"
+Problem
+   ↓
+Internal reasoning steps
+   ↓
+Verification / self-check
+   ↓
+Final answer
+```
+
+---
+
+## Core Idea
+
+Reasoning model শুধু “answer” generate করে না, বরং:
+
+* intermediate steps তৈরি করে
+* logic verify করে
+* ভুল ধরার চেষ্টা করে
+* multiple solution explore করে
+
+---
+
+## Example
+
+প্রশ্ন:
+
+> 25 × 24 কত?
+
+### সাধারণ LLM:
+
+> 600
+
+### Reasoning Model:
+
+```text id="rm2"
+25 × 24
+= 25 × (20 + 4)
+= (25 × 20) + (25 × 4)
+= 500 + 100
+= 600
+```
+
+---
+
+## Reasoning Models কীভাবে তৈরি হয়?
+
+### 1. Large-scale pretraining
+
+* language + knowledge শেখে
+
+### 2. Instruction tuning
+
+* প্রশ্ন বোঝা শেখে
+
+### 3. Reasoning-focused training
+
+* math, logic, coding datasets
+
+### 4. RLHF / Reinforcement learning
+
+* ভালো reasoning output reward পায়
+
+### 5. Process supervision (advanced)
+
+* শুধু final answer না, steps-ও evaluate করা হয়
+
+---
+
+## Key Techniques used
+
+### 1. Chain of Thought (CoT)
+
+Step-by-step reasoning
+
+---
+
+### 2. Self-consistency
+
+একাধিক reasoning path generate করে best answer নির্বাচন
+
+---
+
+### 3. Tree of Thought
+
+একাধিক reasoning branch explore করে
+
+```text id="rm3"
+          Problem
+        /   |   \
+     path1 path2 path3
+        \    |    /
+         best solution
+```
+
+---
+
+### 4. Reflection / Self-critique
+
+Model নিজের উত্তর review করে
+
+---
+
+## Reasoning Model কোথায় দরকার?
+
+* Math problems
+* Coding & debugging
+* Business planning
+* Legal reasoning
+* Scientific analysis
+* Multi-step decision making
+
+---
+
+## Example (real-world style)
+
+User:
+
+> “একটা startup plan বানাও”
+
+Reasoning model করবে:
+
+```text id="rm4"
+1. Market analysis
+2. Target users
+3. Revenue model
+4. Cost estimation
+5. Risk analysis
+6. Final plan
+```
+
+---
+
+## Why reasoning models are harder
+
+* correct answer না, correct thinking দরকার
+* long dependency chains
+* error propagation সমস্যা
+* evaluation difficult
+
+---
+
+## LLM vs Reasoning Model in pipeline
+
+```text id="rm5"
+Standard LLM:
+Text → Token prediction → Answer
+
+Reasoning Model:
+Problem → Planning → Multi-step reasoning → Verification → Answer
+```
+
+---
+
+## Modern trend
+
+New generation AI models focus on:
+
+* better reasoning
+* less hallucination
+* tool usage (MCP + Agents)
+* structured thinking
+
+---
+
+## One-line definition
+
+> **Reasoning Models হলো এমন LLM যা জটিল সমস্যার সমাধানে ধাপে ধাপে চিন্তা, যাচাই এবং পরিকল্পনা করে সঠিক সিদ্ধান্তে পৌঁছানোর জন্য optimized।**
+
+---
+
+চাওলে আমি next step হিসেবে **Tree of Thought deep dive** বা **Reasoning Models vs Agents vs RAG comparison architecture** দেখাতে পারি।
+
+17. Multi-modal Models
+=====================
+## Multi-modal Models
+
+**Multi-modal Models** হলো এমন AI systems যেগুলো একাধিক ধরনের data একসাথে বুঝতে ও প্রক্রিয়া করতে পারে—যেমন text, image, audio, video।
+
+সহজভাবে:
+
+> Multi-modal model = এমন AI যা শুধু লেখা না, চোখ, কান এবং অন্যান্য ইনপুটও “বোঝে”।
+
+---
+
+## কেন দরকার?
+
+আগের LLM শুধু text বুঝত:
+
+* লেখা → ঠিক
+* ছবি → বুঝতে পারে না
+* audio → বুঝতে পারে না
+
+কিন্তু বাস্তব পৃথিবী multi-modal:
+
+* মানুষ দেখে
+* শোনে
+* পড়ে
+* ভিডিও দেখে
+
+তাই AI-ও multi-modal হওয়া দরকার।
+
+---
+
+## Input types
+
+### 1. Text
+
+```text id="mm1"
+"What is in this image?"
+```
+
+---
+
+### 2. Image
+
+* photo
+* diagram
+* screenshot
+
+---
+
+### 3. Audio
+
+* speech
+* music
+* voice command
+
+---
+
+### 4. Video
+
+* frames + audio + context
+
+---
+
+## Multi-modal model কীভাবে কাজ করে?
+
+```text id="mm2"
+Image/Text/Audio
+      ↓
+Modality Encoder (separate encoders)
+      ↓
+Shared Embedding Space
+      ↓
+Transformer / LLM
+      ↓
+Output (text / answer / action)
+```
+
+---
+
+## উদাহরণ
+
+### Example 1: Image + Text
+
+User:
+
+> "এই ছবিতে কী আছে?"
+
+Model:
+
+* image analyze করে
+* object detect করে
+* text output দেয়
+
+Answer:
+
+> "এখানে একটি কুকুর এবং একটি বল আছে"
+
+---
+
+### Example 2: Audio + Text
+
+User:
+
+> voice command: "Turn on the light"
+
+Model:
+
+* speech → text
+* intent বুঝে
+* action trigger করে
+
+---
+
+### Example 3: Video
+
+User:
+
+> "এই ভিডিওতে কী হচ্ছে?"
+
+Model:
+
+* frame-by-frame analyze
+* motion + objects বুঝে
+* summary দেয়
+
+---
+
+## Architecture (simplified)
+
+```text id="mm3"
+Image Encoder (Vision Transformer)
+Audio Encoder (Speech model)
+Text Encoder (LLM)
+
+        ↓
+   Fusion Layer
+        ↓
+   Transformer
+        ↓
+   Output
+```
+
+---
+
+## Key idea: Shared embedding space
+
+Different data type convert হয় একই ধরনের vector space-এ:
+
+```text id="mm4"
+image → vector
+text → vector
+audio → vector
+```
+
+👉 সব এক জায়গায় compare করা যায়
+
+---
+
+## Popular Multi-modal Models
+
+* GPT-4o
+* Gemini
+* Claude (image understanding variants)
+* LLaVA
+
+---
+
+## Real-world use cases
+
+### 1. Image understanding
+
+* medical scan analysis
+* object detection
+* document reading
+
+---
+
+### 2. Voice assistants
+
+* Siri-like systems
+* call center AI
+
+---
+
+### 3. Video analysis
+
+* surveillance
+* sports analysis
+* content moderation
+
+---
+
+### 4. Document AI
+
+* PDF + image + text understanding
+* invoice processing
+
+---
+
+## Multi-modal vs LLM
+
+| Feature    | LLM           | Multi-modal                  |
+| ---------- | ------------- | ---------------------------- |
+| Input      | text only     | text + image + audio + video |
+| Capability | language      | perception + language        |
+| Use cases  | chat, writing | real-world AI systems        |
+
+---
+
+## Why it is powerful?
+
+✔ real-world understanding
+✔ human-like perception
+✔ better context
+✔ richer interaction
+
+---
+
+## One-line definition
+
+> **Multi-modal model হলো এমন AI system যা একাধিক ধরনের data (text, image, audio, video) একসাথে বুঝতে এবং process করতে পারে।**
+
+---
+
+## LLM ecosystem-এ position
+
+```text id="mm5"
+Text LLM
+   ↓
+Reasoning Models
+   ↓
+Agents + Tools
+   ↓
+Multi-modal Models
+   ↓
+Real-world AI Systems
+```
+
+---
+
+চাওলে আমি next step হিসেবে **Vision Transformer (ViT)** বা **GPT-4o মতো multi-modal architecture ভিতরে কীভাবে কাজ করে** সেটা deepভাবে বুঝিয়ে দিতে পারি।
+
+
+18. Small Language Models
+=========================
+## Small Language Models (SLM)
+
+**Small Language Models (SLMs)** হলো ছোট আকারের language model, যেগুলো কম parameter ব্যবহার করে তৈরি করা হয় এবং দ্রুত, কম খরচে কাজ করতে পারে।
+
+সহজভাবে:
+
+> SLM = ছোট কিন্তু efficient AI model, যা limited resources-এ ভালো কাজ করে।
+
+---
+
+## SLM vs Large Language Model (LLM)
+
+| বিষয়       | SLM                            | LLM                             |
+| ---------- | ------------------------------ | ------------------------------- |
+| Size       | ছোট (millions–billions params) | বড় (tens/hundreds of billions) |
+| Speed      | খুব দ্রুত                      | তুলনামূলক ধীর                   |
+| Cost       | কম                             | বেশি                            |
+| Accuracy   | moderate                       | high                            |
+| Deployment | mobile/edge                    | cloud servers                   |
+
+---
+
+## কেন SLM দরকার?
+
+সব AI সবসময় বড় model হতে হবে না:
+
+* মোবাইলে চালানো
+* offline AI assistant
+* low-cost deployment
+* privacy-sensitive apps
+* real-time response
+
+---
+
+## SLM কীভাবে কাজ করে?
+
+SLM-ও same core idea ব্যবহার করে:
+
+```text id="slm1"
+Tokenization
+   ↓
+Embedding
+   ↓
+Transformer layers (small)
+   ↓
+Output
+```
+
+কিন্তু difference:
+
+* কম layers
+* কম parameters
+* optimized architecture
+
+---
+
+## SLM-এর উদাহরণ ব্যবহার
+
+* mobile keyboard suggestions
+* offline chatbot
+* embedded devices (IoT)
+* customer support automation
+* on-device translation
+
+---
+
+## Popular Small Models
+
+* Phi-3
+* Gemma
+* Mistral 7B
+* Llama 3 8B
+
+---
+
+## SLM কেন দ্রুত?
+
+কারণ:
+
+### 1. কম parameters
+
+কম গণনা লাগে
+
+### 2. ছোট memory footprint
+
+RAM কম ব্যবহার করে
+
+### 3. optimized inference
+
+quantization ব্যবহার করা হয়
+
+---
+
+## SLM vs LLM tradeoff
+
+| Tradeoff     | SLM           | LLM           |
+| ------------ | ------------- | ------------- |
+| Speed        | +++           | +             |
+| Intelligence | ++            | +++           |
+| Cost         | low           | high          |
+| Scalability  | edge-friendly | cloud-focused |
+
+---
+
+## SLM কোথায় best?
+
+### 1. Edge devices
+
+* mobile
+* laptop
+* IoT devices
+
+### 2. Offline AI
+
+* no internet required
+
+### 3. Lightweight assistants
+
+* simple Q&A
+* task automation
+
+---
+
+## SLM কীভাবে improved করা হয়?
+
+### 1. Distillation
+
+বড় model → ছোট model transfer
+
+### 2. Quantization
+
+model size কমানো (FP32 → INT8)
+
+### 3. Pruning
+
+unnecessary weights remove করা
+
+---
+
+## SLM architecture idea
+
+```text id="slm2"
+Big Model (Teacher)
+        ↓
+Knowledge transfer
+        ↓
+Small Model (Student)
+```
+
+---
+
+## বাস্তব example
+
+User:
+
+> "আজকের আবহাওয়া কেমন?"
+
+SLM:
+
+* local cached data
+* lightweight API call
+* fast response
+
+---
+
+## One-line definition
+
+> **Small Language Model হলো একটি কম size-এর AI model যা efficient, fast এবং low-resource environment-এ language tasks করতে পারে।**
+
+---
+
+## LLM ecosystem-এ position
+
+```text id="slm3"
+LLM (powerful reasoning)
+        ↓
+SLM (edge + fast execution)
+        ↓
+Hybrid AI systems
+```
+
+---
+
+চাওলে আমি next step হিসেবে **Distillation deep concept** বা **SLM vs LLM real deployment architecture (cloud + edge hybrid system)** বুঝিয়ে দিতে পারি।
+
+19. Distillation
+================
+## Distillation (Model Distillation)
+
+**Distillation** হলো এমন একটি technique যেখানে একটি বড়, শক্তিশালী model (Teacher) থেকে শেখা knowledge একটি ছোট model (Student)-এর মধ্যে transfer করা হয়।
+
+সহজভাবে:
+
+> Distillation = বড় AI model-এর জ্ঞান ছোট model-এ “কপি না করে শেখানো”
+
+---
+
+## কেন দরকার?
+
+বড় model:
+
+* খুব accurate
+* কিন্তু slow
+* expensive
+* heavy compute লাগে
+
+ছোট model:
+
+* fast
+* cheap
+* deploy করা সহজ
+  কিন্তু কম smart
+
+👉 Distillation এই gap কমায়
+
+---
+
+## Core Idea
+
+```text id="ds1"
+Teacher Model (Big, Smart)
+          ↓  knowledge transfer
+Student Model (Small, Fast)
+```
+
+Student model শুধু correct answer না, বরং teacher-এর “behavior” শেখে।
+
+---
+
+## কী শেখানো হয়?
+
+Distillation-এ শুধু final answer না, বরং:
+
+### 1. Soft probabilities
+
+Teacher কোন answer কতটা confident ছিল
+
+```text id="ds2"
+Option A: 0.70
+Option B: 0.20
+Option C: 0.10
+```
+
+👉 Student এই distribution শেখে
+
+---
+
+### 2. Reasoning pattern
+
+Teacher কীভাবে চিন্তা করেছে
+
+---
+
+### 3. Output behavior
+
+* style
+* tone
+* structure
+
+---
+
+## Training process
+
+```text id="ds3"
+Input text
+   ↓
+Teacher model → generates outputs
+   ↓
+Student model → tries to match teacher
+   ↓
+Loss calculation (difference)
+   ↓
+Student update
+```
+
+---
+
+## Example
+
+Question:
+
+> “What is 12 × 15?”
+
+### Teacher:
+
+* step-by-step reasoning
+* correct answer: 180
+
+### Student:
+
+* শেখে শুধু 180 না
+* শেখে “কীভাবে solve করতে হয়”
+
+---
+
+## Types of Distillation
+
+### 1. Response Distillation
+
+Student শুধু final output শেখে
+
+---
+
+### 2. Logit Distillation
+
+Teacher-এর probability distribution শেখে
+
+---
+
+### 3. Feature Distillation
+
+Intermediate layers-এর knowledge transfer
+
+---
+
+## Real-world analogy
+
+একজন expert teacher:
+
+* সব জানে (LLM)
+* ক্লাস পড়ায়
+
+একজন student:
+
+* নোট করে
+* pattern শিখে
+* পরে নিজে solve করতে পারে
+
+---
+
+## Why distillation works
+
+কারণ large model:
+
+* অনেক general pattern শিখে
+* redundant knowledge থাকে
+* compress করা সম্ভব
+
+---
+
+## Distillation vs Fine-tuning
+
+| বিষয়   | Distillation       | Fine-tuning          |
+| ------ | ------------------ | -------------------- |
+| goal   | model compress করা | model specialize করা |
+| source | teacher model      | dataset              |
+| output | small model mimic  | behavior adjust      |
+
+---
+
+## Where it is used
+
+### 1. Small Language Models
+
+* mobile AI
+* edge devices
+
+---
+
+### 2. Chatbot compression
+
+* GPT-like → small assistant
+
+---
+
+### 3. Vision models
+
+* large vision transformer → tiny model
+
+---
+
+### 4. Enterprise AI
+
+* expensive model → cheap deployment model
+
+---
+
+## Distillation pipeline in LLM ecosystem
+
+```text id="ds4"
+Large LLM (Teacher)
+        ↓
+Knowledge transfer
+        ↓
+Small LLM (Student)
+        ↓
+Deployment (fast inference)
+```
+
+---
+
+## Benefits
+
+✔ faster inference
+✔ lower cost
+✔ less memory
+✔ edge deployment possible
+✔ similar performance to large model
+
+---
+
+## Limitations
+
+* full intelligence transfer হয় না
+* complex reasoning কিছুটা কমে যায়
+* training process expensive
+* teacher quality খুব গুরুত্বপূর্ণ
+
+---
+
+## One-line definition
+
+> **Distillation হলো এমন একটি process যেখানে একটি বড় AI model-এর knowledge একটি ছোট model-এ transfer করা হয় যাতে ছোট model দ্রুত এবং efficientভাবে কাজ করতে পারে।**
+
+---
+
+## LLM ecosystem-এ position
+
+```text id="ds5"
+LLM (Teacher models)
+        ↓
+Distillation
+        ↓
+SLM (efficient models)
+        ↓
+Edge AI deployment
+```
+
+---
+
+চাওলে আমি next step হিসেবে **Quantization vs Distillation comparison** বা **real production pipeline (GPT → distilled mobile model)** বুঝিয়ে দিতে পারি।
+
+
+20. Quantization
+================
+## Quantization
+
+**Quantization** হলো এমন একটি technique যেখানে একটি AI model-এর সংখ্যাগুলো (weights) কম precision-এ (কম বিটে) রূপান্তর করা হয়, যাতে model ছোট, দ্রুত এবং কম memory ব্যবহার করে।
+
+সহজভাবে:
+
+> Quantization = model-এর “বড় সংখ্যাকে ছোট format-এ compress করা”, যাতে performance অনেকটাই ঠিক রেখে efficiency বাড়ে।
+
+---
+
+## কেন দরকার?
+
+LLM সাধারণত অনেক বড়:
+
+* RAM বেশি লাগে
+* GPU দরকার
+* inference ধীর হয়
+
+Quantization করলে:
+
+* model ছোট হয়
+* speed বাড়ে
+* cost কমে
+* edge device-এ চালানো যায়
+
+---
+
+## মূল ধারণা
+
+Original model:
+
+```text id="qt1"
+FP32 (32-bit float)
+0.123456789
+```
+
+Quantized model:
+
+```text id="qt2"
+INT8 (8-bit integer)
+0.12 → 12
+```
+
+👉 কম precision, কিন্তু অনেক কম memory লাগে
+
+---
+
+## কীভাবে কাজ করে?
+
+### Step 1: Weights থাকে float-এ
+
+Model-এর সব weight সাধারণত FP32 বা FP16
+
+---
+
+### Step 2: Scale করা হয়
+
+```text id="qt3"
+original value → scaled value → integer
+```
+
+---
+
+### Step 3: Store করা হয় কম bits-এ
+
+* FP32 → 4 bytes
+* INT8 → 1 byte
+
+👉 4x memory saving
+
+---
+
+## Quantization Levels
+
+### 1. FP32 (Full precision)
+
+* highest accuracy
+* highest cost
+
+---
+
+### 2. FP16 / BF16
+
+* medium precision
+* faster GPU inference
+
+---
+
+### 3. INT8
+
+* very common
+* good balance
+
+---
+
+### 4. INT4 / 4-bit
+
+* ultra small models
+* edge devices
+
+---
+
+## Types of Quantization
+
+### 1. Post-training Quantization (PTQ)
+
+Training শেষে compress করা হয়
+
+---
+
+### 2. Quantization-aware Training (QAT)
+
+Training-এর সময়ই quantization simulate করা হয়
+
+👉 বেশি accurate
+
+---
+
+## উদাহরণ
+
+Original model:
+
+```text id="qt4"
+Weight = 0.782345
+```
+
+Quantized:
+
+```text id="qt5"
+Weight = 8 (INT8 scale)
+```
+
+---
+
+## কেন এটা কাজ করে?
+
+কারণ neural networks:
+
+* exact number না
+* pattern শেখে
+* ছোট error tolerate করতে পারে
+
+---
+
+## Quantization vs Distillation
+
+| বিষয়       | Quantization           | Distillation             |
+| ---------- | ---------------------- | ------------------------ |
+| goal       | model compress করা     | knowledge transfer       |
+| method     | number precision কমানো | teacher-student learning |
+| training   | optional               | required                 |
+| speed gain | high                   | high                     |
+
+---
+
+## Real-world impact
+
+Quantization করলে:
+
+* 7B model → mobile friendly
+* 70B model → smaller GPU run
+* latency অনেক কমে যায়
+
+---
+
+## কোথায় ব্যবহার হয়?
+
+* mobile AI apps
+* edge devices (IoT)
+* chatbot deployment
+* on-device LLM (offline AI)
+* cloud cost reduction
+
+---
+
+## LLM pipeline-এ Quantization
+
+```text id="qt6"
+Large trained model
+        ↓
+Quantization (FP32 → INT8/INT4)
+        ↓
+Compressed model
+        ↓
+Fast inference
+```
+
+---
+
+## Benefits
+
+✔ memory কম লাগে
+✔ faster inference
+✔ lower cost
+✔ edge deployment possible
+
+---
+
+## Drawbacks
+
+* slight accuracy loss
+* very low precision এ quality drop হতে পারে
+* careful calibration দরকার
+
+---
+
+## Real example
+
+* GPT-like model cloud-এ FP16
+* mobile assistant INT8
+* embedded AI INT4
+
+---
+
+## One-line definition
+
+> **Quantization হলো এমন একটি process যেখানে AI model-এর weights কম precision format-এ convert করে তাকে ছোট, দ্রুত এবং efficient করা হয়।**
+
+---
+
+## LLM ecosystem-এ position
+
+```text id="qt7"
+Training (FP32)
+   ↓
+Distillation (optional)
+   ↓
+Quantization
+   ↓
+Deployment (fast + cheap AI)
+```
+
+---
+
+চাওলে আমি next step হিসেবে **Distillation vs Quantization combined pipeline (real production LLM optimization)** বা **GGUF / GPTQ / AWQ formats কীভাবে কাজ করে** বুঝিয়ে দিতে পারি।
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+নিচে প্রতিটা ধারণা সহজভাবে, LLM প্রসঙ্গে ব্যাখ্যা করা হলো।
+
+---
+
+## 7. Fine-tuning
+
+একটি pre-trained model-কে নির্দিষ্ট কাজের জন্য আবার train করা।
+
+উদাহরণ:
+
+* General GPT → Medical GPT
+* General LLM → Legal assistant
+
+```text
+Base Model → New dataset → Specialized model
+```
+
+---
+
+## 8. Few-shot Prompting
+
+মডেলকে কয়েকটি example দেখিয়ে কাজ শেখানো, training ছাড়া।
+
+```text
+Translate:
+English → Bangla
+Hello → হ্যালো
+Thanks → ধন্যবাদ
+Good → ?
+```
+
+---
+
+## 9. Retrieval Augmented Generation (RAG)
+
+LLM + External knowledge system
+
+```text
+User Query
+   ↓
+Vector Search (Docs)
+   ↓
+Relevant Info
+   ↓
+LLM Answer
+```
+
+👉 মডেল নতুন তথ্য না জানলেও ডক থেকে তুলে উত্তর দেয়
+
+---
+
+## 10. Vector Database
+
+Embeddings সংরক্ষণ করার ডাটাবেস
+
+উদাহরণ:
+
+* Pinecone
+* Weaviate
+* FAISS
+
+```text
+Text → Embedding → Store → Similarity Search
+```
+
+---
+
+## 11. Model Context Protocol (MCP)
+
+LLM-এর জন্য standardized way tools + data access করার protocol
+
+👉 অর্থ:
+LLM কীভাবে:
+
+* API call করবে
+* database পড়বে
+* tools ব্যবহার করবে
+
+সব একভাবে define করা
+
+---
+
+## 12. Context Engineering
+
+Prompt Engineering-এর advanced version
+
+👉 শুধু prompt না, পুরো context design করা:
+
+* system prompt
+* memory
+* tools
+* retrieved data
+
+Goal:
+
+> LLM-এর জন্য সঠিক information environment তৈরি করা
+
+---
+
+## 13. Agents
+
+LLM-based autonomous system
+
+```text
+Goal → Plan → Tools use → Execute → Result
+```
+
+উদাহরণ:
+
+* Auto GPT
+* AI assistant that browses, codes, runs tasks
+
+---
+
+## 14. Reinforcement Learning (RL)
+
+Trial and error ভিত্তিক শেখা
+
+```text
+Action → Reward / Penalty → Improve
+```
+
+LLM context:
+
+* RLHF (Human Feedback)
+* Model response improve করা
+
+---
+
+## 15. Chain of Thought (CoT)
+
+Step-by-step reasoning দেখানো
+
+Example:
+
+```text
+Q: 2+2×2 = ?
+
+Step 1: multiplication first → 2×2=4
+Step 2: 2+4=6
+Answer: 6
+```
+
+👉 reasoning improve করে
+
+---
+
+## 16. Reasoning Models
+
+এমন model যা logical thinking + multi-step problem solve করতে optimize করা
+
+Features:
+
+* math
+* coding
+* planning
+
+---
+
+## 17. Multi-modal Models
+
+একাধিক data type বুঝতে পারে:
+
+* text
+* image
+* audio
+* video
+
+Example:
+
+* image captioning
+* vision + text chat
+
+---
+
+## 18. Small Language Models (SLM)
+
+ছোট LLM
+
+Features:
+
+* low compute
+* fast
+* edge devices
+
+Example:
+
+* mobile AI assistant
+* on-device chatbot
+
+---
+
+## 19. Distillation
+
+Big model → Small model transfer
+
+```text
+Teacher Model (large)
+        ↓
+Student Model (small)
+```
+
+Goal:
+
+* same intelligence
+* lower cost
+
+---
+
+## 20. Quantization
+
+Model size কমানো (precision কমিয়ে)
+
+Example:
+
+* FP32 → INT8
+
+Benefits:
+
+* faster inference
+* less memory
+* cheaper deployment
+
+---
+
+## সব মিলিয়ে LLM ecosystem
+
+```text
+Pretraining (Self-supervised)
+        ↓
+Fine-tuning / RLHF
+        ↓
+Prompting / Few-shot / CoT
+        ↓
+RAG + Vector DB
+        ↓
+Agents + Tools + MCP
+        ↓
+Optimization (Distillation, Quantization)
+```
+
+---
+
+## এক লাইনে সারসংক্ষেপ
+
+* **Fine-tuning** → model specialize করা
+* **Few-shot** → example দিয়ে শেখানো
+* **RAG** → external knowledge ব্যবহার
+* **Vector DB** → embeddings store করা
+* **MCP** → tools access standard করা
+* **Context Engineering** → পুরো input environment design
+* **Agents** → autonomous AI system
+* **RL** → reward-based learning
+* **CoT** → step-by-step reasoning
+* **Reasoning Models** → logic-heavy AI
+* **Multi-modal** → text+image+audio
+* **SLM** → ছোট efficient model
+* **Distillation** → big to small transfer
+* **Quantization** → model compress করা
